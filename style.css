@@ -1,3 +1,278 @@
+/* Ripple effect for blue drop */
+.water-ripple-effect {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  background: rgba(46,157,247,0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  pointer-events: none;
+  z-index: 2;
+  animation: ripplePop 0.6s ease-out;
+}
+
+@keyframes ripplePop {
+  0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.5);}
+  70% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.2);}
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8);}
+}
+/* Water splash effect for blue drop */
+.water-splash-effect {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #2E9DF7 70%, rgba(46,157,247,0.2) 100%);
+  pointer-events: none;
+  animation: waterSplashPop 0.6s ease-out;
+  z-index: 2;
+}
+
+@keyframes waterSplashPop {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.5) translate(-50%, -50%);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.2) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6) translate(-50%, -50%);
+  }
+}
+
+/* Full screen rainbow confetti shower for rainbow drop */
+.rainbow-confetti {
+  pointer-events: none;
+  animation: rainbowConfettiAnim 1.2s linear forwards;
+}
+
+@keyframes rainbowConfettiAnim {
+  0% {
+    top: -40px;
+    opacity: 0.9;
+    transform: scale(1) rotate(0deg);
+  }
+  80% {
+    opacity: 0.9;
+    transform: scale(1.1) rotate(20deg);
+  }
+  100% {
+    top: 90vh;
+    opacity: 0;
+    transform: scale(0.8) rotate(-20deg);
+  }
+}
+/* Centered charity:water logo, responsive */
+.cw-title-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.cw-logo-horizontal-responsive {
+    max-width: 260px;
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      max-width: 95vw;
+      padding: 16px;
+    }
+    .game-grid {
+      max-width: 180px;
+      gap: 8px;
+    }
+    .grid-cell {
+      border-radius: 6px;
+    }
+    .drop-small {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+
+@media (max-width: 900px) {
+  .cw-logo-horizontal-responsive {
+    height: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cw-logo-horizontal-responsive {
+    height: 28px;
+  }
+}
+
+/* New stats bar with drop backgrounds */
+/* New stats bar with centered labels above counts */
+.stats-new {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  padding: 0 8px;
+}
+
+.stat-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2E9DF7;
+  text-align: center;
+}
+
+
+.stat-left {
+  align-items: center;
+  justify-content: flex-start;
+  width: 50%;
+}
+.stat-right {
+  align-items: center;
+  justify-content: flex-end;
+  width: 50%;
+}
+
+@keyframes confettiExplode {
+  0% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1.2) translateY(-30px) rotate(20deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1) translateY(60px) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+/* Shake effect for orange drop */
+.shake-board {
+  animation: shakeBoardAnim 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shakeBoardAnim {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+/* Orange splash effect for orange drop */
+.orange-splash-effect {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 144, 42, 0.55);
+  pointer-events: none;
+  animation: orangeSplashPop 0.5s ease-out;
+  z-index: 2;
+}
+
+@keyframes orangeSplashPop {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.5) translate(-50%, -50%);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.2) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6) translate(-50%, -50%);
+  }
+}
+/* Drop shower animation for mission complete */
+.shower-drop {
+  pointer-events: none;
+  animation: dropShowerAnim 1.2s linear forwards;
+}
+
+@keyframes dropShowerAnim {
+  0% {
+    top: -60px;
+    opacity: 0.85;
+    transform: scale(1) rotate(0deg);
+  }
+  80% {
+    opacity: 0.85;
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    top: 90vh;
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+}
+/* Splash effect for drop click */
+.splash-effect {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(46, 157, 247, 0.45);
+  pointer-events: none;
+  animation: splashPop 0.5s ease-out;
+  z-index: 2;
+}
+
+@keyframes splashPop {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.5) translate(-50%, -50%);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.2) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6) translate(-50%, -50%);
+  }
+}
+/* Title and logo styling */
+.cw-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.cw-logo-horizontal {
+  height: 48px;
+  margin-right: 18px;
+}
+
+.cw-title-text {
+  font-family: "Baskerville", "Times New Roman", Times, serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 1px;
+}
 /* Charity: water Brand Colors & Fonts
 
 Primary Colors:
@@ -22,21 +297,33 @@ Fonts:
   box-sizing: border-box;
 }
 
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 30px;
-  background-color: #f0f0f0;
+  background-color: transparent;
   color: #333;
+}
+
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
 }
 
 .container {
   max-width: 750px;
   margin: 50px auto;
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.15); /* semi-transparent white */
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
 }
 
 h1 {
@@ -84,7 +371,11 @@ h1 img {
 }
 
 .grid-cell {
-  background-color: #e8e8e8;
+  background-color: transparent;
+  background-image: url('img/water-can-transparent.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   border-radius: 8px;
   aspect-ratio: 1;
   display: flex;
@@ -94,6 +385,7 @@ h1 img {
   transition: background-color 0.3s;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.12);
 }
 
 .water-can-wrapper {
@@ -106,17 +398,14 @@ h1 img {
   /* Ensure the wrapper is properly centered */
 }
 
-.water-can {
-  width: 100%;
-  height: 100%;
-  background-image: url('img/water-can.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  border-radius: 50%;
+
+.drop-small {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
   animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
-  transform-origin: center; /* Ensure scaling happens from the center */
+  transform-origin: center;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
 }
 
 @keyframes popUp {
@@ -141,3 +430,4 @@ button {
   margin: 30px auto 0;
   transition: background-color 0.2s;
 }
+

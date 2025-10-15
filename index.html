@@ -7,16 +7,29 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="img/moon-walk.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
   <div class="container">
-    <h1>Water Quest</h1>
-    <p class="game-instructions">Collect 20 items to complete the game!</p>
-    <div class="stats">
-      <p>Cans Collected: <span id="current-cans">0</span></p>
-      <p>Time Left: <span id="timer">30</span>s</p>
+    <div class="cw-title-centered">
+      <img src="img/cw_logo_horizontal.png" alt="charity:water logo" class="cw-logo-horizontal-responsive" />
+    </div>
+    <p class="game-instructions">Collect as many drops as you can!</p>
+    <div class="stats-new">
+      <div class="stat-col stat-left">
+        <div class="stat-label">Drops</div>
+        <div class="stat-value" id="current-cans"></div>
+      </div>
+      <div class="stat-col stat-right">
+        <div class="stat-label">Timer</div>
+        <div class="stat-value" id="timer"></div>
+      </div>
     </div>
     <div id="achievements" class="achievement"></div>
     <div class="game-grid"></div>
-    <button id="start-game">Start Game</button>
+  <button id="start-game">Start Game</button>
+  <button id="reset-game">Reset</button>
   </div>
   <script src="script.js"></script>
 </body>
