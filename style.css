@@ -1,22 +1,35 @@
-/* Ripple effect for blue drop */
+/* Ripple effect for blue drop - Enhanced with multiple rings */
 .water-ripple-effect {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 60px;
-  height: 60px;
-  background: rgba(46,157,247,0.4);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(46,157,247,0.6) 0%, rgba(46,157,247,0.3) 40%, rgba(46,157,247,0) 70%);
+  border: 2px solid rgba(46,157,247,0.5);
   border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0.5);
+  transform: translate(-50%, -50%) scale(0.3);
   pointer-events: none;
-  z-index: 2;
-  animation: ripplePop 0.6s ease-out;
+  z-index: 5;
+  animation: ripplePop 0.8s ease-out;
 }
 
 @keyframes ripplePop {
-  0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.5);}
-  70% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.2);}
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8);}
+  0% { 
+    opacity: 0.9; 
+    transform: translate(-50%, -50%) scale(0.3);
+    border-width: 3px;
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: translate(-50%, -50%) scale(1.4);
+    border-width: 2px;
+  }
+  100% { 
+    opacity: 0; 
+    transform: translate(-50%, -50%) scale(2.2);
+    border-width: 1px;
+  }
 }
 /* Water splash effect for blue drop */
 .water-splash-effect {
@@ -114,7 +127,7 @@
 .stats-new {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 30px;
   gap: 10px;
 }
@@ -146,12 +159,23 @@
 .stat-left {
   align-items: center;
   justify-content: flex-start;
-  width: 50%;
+  flex: 1;
 }
+
+.stat-center {
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.stat-center button {
+  margin: 0;
+}
+
 .stat-right {
   align-items: center;
   justify-content: flex-end;
-  width: 50%;
+  flex: 1;
 }
 
 @keyframes confettiExplode {
@@ -427,7 +451,414 @@ button {
   border-radius: 8px;
   cursor: pointer;
   display: block;
-  margin: 30px auto 0;
+  margin: 0 auto;
   transition: background-color 0.2s;
+}
+
+#reset-game {
+  margin-top: 30px;
+}
+
+/* Ticker Banner Styles */
+.ticker-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(135deg, #FFC907 0%, #FF902A 100%);
+  color: white;
+  padding: 12px 0;
+  z-index: 9999;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.ticker-content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ticker-content a {
+  color: white;
+  text-decoration: none;
+  padding: 0 20px;
+  transition: opacity 0.3s;
+}
+
+.ticker-content a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.ticker-separator {
+  color: rgba(255,255,255,0.6);
+  padding: 0 10px;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Duplicate ticker content for seamless loop */
+.ticker-content::after {
+  content: '💧 Donate • 🎉 Fundraise • 🤝 Volunteer • 🌍 Partner • ✨ Take Action • ';
+  padding-left: 40px;
+}
+
+/* Adjust body padding for ticker */
+body {
+  padding-top: 80px;
+}
+
+/* Mission Popup Styles */
+.mission-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.popup-content {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.popup-content h2 {
+  color: #2E9DF7;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.popup-content p {
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.popup-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.popup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.popup-btn-primary {
+  background: #FFC907;
+  color: #333;
+}
+
+.popup-btn {
+  background: #2E9DF7;
+  color: white;
+}
+
+.popup-btn-close {
+  background: #ddd;
+  color: #333;
+}
+
+/* How to Play Popup Styles */
+.howto-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  animation: fadeIn 0.3s ease-out;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.howto-content {
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.howto-content h2 {
+  color: #2E9DF7;
+  margin-bottom: 25px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.howto-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.howto-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.howto-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.howto-icon {
+  font-size: 36px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.howto-text {
+  flex: 1;
+}
+
+.howto-text strong {
+  display: block;
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.howto-text p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Milestone Celebration Styles */
+.milestone-celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.milestone-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #FFC907, #FF902A);
+  color: white;
+  padding: 30px 60px;
+  border-radius: 16px;
+  font-size: 32px;
+  font-weight: bold;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  animation: milestonePopup 0.6s cubic-bezier(0.17, 0.67, 0.34, 2);
+}
+
+@keyframes milestonePopup {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.milestone-confetti {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  top: -20px;
+  animation: milestoneFall 2s ease-out forwards;
+}
+
+@keyframes milestoneFall {
+  0% { 
+    top: -20px; 
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  100% { 
+    top: 100vh; 
+    opacity: 0;
+    transform: rotate(720deg);
+  }
+}
+
+/* Difficulty Level Notification */
+.difficulty-notification {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #4FCB53, #159A48);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  z-index: 9999;
+  animation: notificationSlide 0.5s ease-out;
+}
+
+@keyframes notificationSlide {
+  from { 
+    transform: translateX(-50%) translateY(-100px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateX(-50%) translateY(0); 
+    opacity: 1; 
+  }
+}
+
+/* Footer Styles */
+.game-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(2px);
+  color: #333;
+  padding: 10px 0;
+  z-index: 9998;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+}
+
+.footer-content {
+  max-width: 750px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-branding {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-logo {
+  height: 24px;
+}
+
+.footer-tagline {
+  font-size: 12px;
+  color: #333;
+  margin: 0;
+}
+
+.footer-donate {
+  display: flex;
+  align-items: center;
+}
+
+.donate-link {
+  display: inline-block;
+  transition: transform 0.3s, filter 0.3s;
+}
+
+.donate-link:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.donate-button {
+  height: 35px;
+  cursor: pointer;
+}
+
+/* Adjust container margin for footer */
+.container {
+  margin-bottom: 100px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .ticker-content {
+    font-size: 14px;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .footer-branding {
+    align-items: center;
+  }
+  
+  .milestone-text {
+    font-size: 24px;
+    padding: 20px 40px;
+  }
+  
+  .popup-content {
+    margin: 20px;
+    padding: 30px 20px;
+  }
+  
+  .popup-content h2 {
+    font-size: 22px;
+  }
+  
+  body {
+    padding-top: 70px;
+  }
 }
 

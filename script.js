@@ -9,6 +9,85 @@ let gameActive = false; // Tracks if game is currently running
 let spawnInterval; // Holds the interval for spawning items
 let timerInterval; // Holds the interval for the timer
 let timeLeft = 30; // Standard game time in seconds
+let gamesCompleted = 0; // Track completed games for difficulty progression
+let currentDifficulty = 1; // Current difficulty level
+let milestone25Celebrated = false; // Track if we've celebrated 25 points
+
+// Check if first visit and show How to Play
+function checkFirstVisit() {
+  const hasVisited = localStorage.getItem('waterQuestVisited');
+  if (!hasVisited) {
+    localStorage.setItem('waterQuestVisited', 'true');
+    setTimeout(() => showHowToPlay(), 500);
+  }
+}
+
+// Show How to Play popup
+function showHowToPlay() {
+  const popup = document.createElement('div');
+  popup.className = 'howto-popup';
+  popup.innerHTML = `
+    <div class="popup-content howto-content">
+      <h2>🎮 How to Play Water Quest</h2>
+      <div class="howto-instructions">
+        <div class="howto-item">
+          <div class="howto-icon">💧</div>
+          <div class="howto-text">
+            <strong>Blue Drops (+2 points)</strong>
+            <p>Click to collect and see a beautiful water ripple effect!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">🌈</div>
+          <div class="howto-text">
+            <strong>Rainbow Drops (+5 points)</strong>
+            <p>Rare and valuable! Triggers a rainbow confetti shower!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">🍊</div>
+          <div class="howto-text">
+            <strong>Orange Drops (-3 points)</strong>
+            <p>Contaminated water! Avoid these - they shake the board!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">🟢</div>
+          <div class="howto-text">
+            <strong>Green Drops (+1 point)</strong>
+            <p>Filtered water - every drop counts!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">🟡</div>
+          <div class="howto-text">
+            <strong>Yellow Drops (0 points)</strong>
+            <p>Neutral drops - practice your clicking!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">⭐</div>
+          <div class="howto-text">
+            <strong>Reach 25+ Drops</strong>
+            <p>Unlock a special celebration milestone!</p>
+          </div>
+        </div>
+        <div class="howto-item">
+          <div class="howto-icon">🎯</div>
+          <div class="howto-text">
+            <strong>Goal: 40 Drops in 30 Seconds</strong>
+            <p>Difficulty increases every 3 completed games!</p>
+          </div>
+        </div>
+      </div>
+      <button class="popup-btn popup-btn-primary" onclick="this.closest('.howto-popup').remove()">Start Playing!</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}
+
+// Initialize first visit check
+checkFirstVisit();
 
 // Creates the 3x3 game grid where items will appear
 function createGrid() {
@@ -122,15 +201,21 @@ function showOrangeSplash(cell) {
 
 function showWaterSplash(cell) {
   console.log('showWaterSplash called for cell:', cell);
-  const ripple = document.createElement('div');
-  ripple.className = 'water-ripple-effect';
-  ripple.style.position = 'absolute';
-  ripple.style.left = '50%';
-  ripple.style.top = '50%';
-  ripple.style.transform = 'translate(-50%, -50%)';
-  ripple.style.pointerEvents = 'none';
-  cell.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
+  // Create multiple ripple rings for enhanced effect
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      const ripple = document.createElement('div');
+      ripple.className = 'water-ripple-effect';
+      ripple.style.position = 'absolute';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      ripple.style.transform = 'translate(-50%, -50%)';
+      ripple.style.pointerEvents = 'none';
+      ripple.style.animationDelay = `${i * 0.1}s`;
+      cell.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 800);
+    }, i * 100);
+  }
 }
 
 function showRainbowConfettiShower() {
@@ -165,6 +250,45 @@ function showRainbowConfettiShower() {
   setTimeout(() => shower.remove(), 1400);
 }
 
+// Celebration effect when score reaches 25+
+function showMilestoneCelebration() {
+  const celebration = document.createElement('div');
+  celebration.className = 'milestone-celebration';
+  celebration.innerHTML = '<div class="milestone-text">Amazing! 25+ Drops!</div>';
+  document.body.appendChild(celebration);
+  
+  // Add confetti burst
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'milestone-confetti';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.background = getRandomRainbowColor();
+    confetti.style.animationDelay = `${Math.random() * 0.3}s`;
+    celebration.appendChild(confetti);
+  }
+  
+  setTimeout(() => celebration.remove(), 3000);
+}
+
+// Show charity:water mission popup
+function showMissionPopup() {
+  const popup = document.createElement('div');
+  popup.className = 'mission-popup';
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>💧 Clean Water Changes Everything</h2>
+      <p>You just helped spread awareness about the global water crisis!</p>
+      <p>785 million people lack access to clean water. Together, we can change that.</p>
+      <div class="popup-buttons">
+        <a href="https://www.charitywater.org/donate" target="_blank" class="popup-btn popup-btn-primary">Donate Now</a>
+        <a href="https://www.charitywater.org/global-water-crisis" target="_blank" class="popup-btn">Learn More</a>
+        <button class="popup-btn popup-btn-close" onclick="this.closest('.mission-popup').remove()">Close</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}
+
 // Spawns a new item in a random grid cell
 function spawnWaterCan() {
   if (!gameActive) return;
@@ -193,6 +317,13 @@ function spawnWaterCan() {
       currentCans += dropType.points;
       if (currentCans < 0) currentCans = 0;
       document.getElementById('current-cans').textContent = currentCans;
+      
+      // Check for milestone celebration (25+ drops)
+      if (currentCans >= 25 && !milestone25Celebrated) {
+        milestone25Celebrated = true;
+        setTimeout(() => showMilestoneCelebration(), 300);
+      }
+      
       console.log('Drop clicked:', dropType.name);
       if (dropType.name === 'rainbow') {
         showRainbowConfettiShower();
@@ -219,24 +350,36 @@ function spawnWaterCan() {
       randomCell.innerHTML = '';
     });
 
+    // Increased timeout for drops to stay longer (2500ms instead of 1250ms)
     setTimeout(() => {
       if (!dropRemoved) {
         dropRemoved = true;
         randomCell.innerHTML = '';
       }
-    }, 1250);
+    }, 2500);
   }
+}
+
+// Calculate spawn rate based on difficulty
+function getSpawnRate() {
+  // Start at 800ms, decrease by 100ms per difficulty level (min 400ms)
+  return Math.max(400, 800 - (currentDifficulty - 1) * 100);
 }
 
 // Initializes and starts a new game
 function startGame() {
   if (gameActive) return;
   gameActive = true;
+  milestone25Celebrated = false;
   createGrid();
   setupDropQueue(currentLevel);
   timeLeft = 30;
   document.getElementById('timer').textContent = timeLeft;
-  spawnInterval = setInterval(spawnWaterCan, 1000);
+  
+  // Use dynamic spawn rate based on difficulty
+  const spawnRate = getSpawnRate();
+  spawnInterval = setInterval(spawnWaterCan, spawnRate);
+  
   timerInterval = setInterval(() => {
     timeLeft--;
     document.getElementById('timer').textContent = timeLeft;
@@ -248,6 +391,21 @@ function endGame() {
   gameActive = false;
   clearInterval(spawnInterval);
   clearInterval(timerInterval);
+  
+  // Increment games completed and check for difficulty increase
+  gamesCompleted++;
+  if (gamesCompleted % 3 === 0) {
+    currentDifficulty++;
+    // Show difficulty increase notification
+    const notif = document.createElement('div');
+    notif.className = 'difficulty-notification';
+    notif.textContent = `Level Up! Difficulty: ${currentDifficulty}`;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+  
+  // Show mission popup after game ends
+  setTimeout(() => showMissionPopup(), 1000);
 }
 
 document.getElementById('start-game').addEventListener('click', function () {
@@ -255,6 +413,8 @@ document.getElementById('start-game').addEventListener('click', function () {
   document.getElementById('current-cans').textContent = currentCans;
   const shower = document.getElementById('drop-shower');
   if (shower) shower.remove();
+  const popup = document.querySelector('.mission-popup');
+  if (popup) popup.remove();
   currentLevel = 1;
   startGame();
 });
@@ -268,5 +428,16 @@ document.getElementById('reset-game').addEventListener('click', function () {
   createGrid();
   const shower = document.getElementById('drop-shower');
   if (shower) shower.remove();
+  const popup = document.querySelector('.mission-popup');
+  if (popup) popup.remove();
+  // Reset difficulty on manual reset
+  gamesCompleted = 0;
+  currentDifficulty = 1;
+});
+
+// How to Play link handler
+document.getElementById('howto-link').addEventListener('click', function (e) {
+  e.preventDefault();
+  showHowToPlay();
 });
           showRainbowConfettiShower();
