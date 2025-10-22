@@ -326,7 +326,7 @@
 }
 
 .cw-title-text {
-  font-family: "Baskerville", "Times New Roman", Times, serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.2rem;
   font-weight: bold;
   color: #333;
@@ -358,7 +358,7 @@ Fonts:
 
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Nunito Sans', Arial, sans-serif;
   margin: 0;
   padding: 30px;
   background-color: transparent;
@@ -400,7 +400,9 @@ h1 img {
 }
 
 .game-instructions {
+  font-family: 'Montserrat', sans-serif;
   font-size: 18px;
+  font-weight: 600;
   margin-bottom: 30px;
   text-align: center;
 }
