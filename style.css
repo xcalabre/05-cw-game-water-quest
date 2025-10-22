@@ -160,22 +160,57 @@
   align-items: center;
   justify-content: flex-start;
   flex: 1;
+  min-width: 0;
 }
 
 .stat-center {
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  max-width: 200px;
 }
 
 .stat-center button {
   margin: 0;
+  width: 100%;
+  min-width: 120px;
+  white-space: nowrap;
 }
 
 .stat-right {
   align-items: center;
   justify-content: flex-end;
   flex: 1;
+  min-width: 0;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .stats-new {
+    gap: 8px;
+  }
+  
+  .stat-left, .stat-right {
+    flex: 0 1 auto;
+  }
+  
+  .stat-center {
+    max-width: 150px;
+  }
+  
+  .stat-center button {
+    min-width: 100px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
 }
 
 @keyframes confettiExplode {
@@ -486,12 +521,15 @@ button {
   color: white;
   text-decoration: none;
   padding: 0 20px;
-  transition: opacity 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
 .ticker-content a:hover {
   opacity: 0.8;
   text-decoration: underline;
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
 .ticker-separator {
@@ -502,12 +540,6 @@ button {
 @keyframes tickerScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
-
-/* Duplicate ticker content for seamless loop */
-.ticker-content::after {
-  content: '💧 Donate • 🎉 Fundraise • 🤝 Volunteer • 🌍 Partner • ✨ Take Action • ';
-  padding-left: 40px;
 }
 
 /* Adjust body padding for ticker */
@@ -695,14 +727,15 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, #FFC907, #FF902A);
+  background: linear-gradient(135deg, rgba(255, 201, 7, 0.85), rgba(255, 144, 42, 0.85));
   color: white;
-  padding: 30px 60px;
+  padding: 22px 45px;
   border-radius: 16px;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
   animation: milestonePopup 0.6s cubic-bezier(0.17, 0.67, 0.34, 2);
+  backdrop-filter: blur(4px);
 }
 
 @keyframes milestonePopup {
@@ -790,10 +823,20 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
 
-.footer-logo {
-  height: 24px;
+.footer-site-link {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2E9DF7;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-site-link:hover {
+  color: #FFC907;
+  text-decoration: underline;
 }
 
 .footer-tagline {

@@ -1,8 +1,5 @@
 // Clean, single-version script.js
 // Game configuration and state variables
-// Clean, single-version script.js
-
-// Game configuration and state variables
 const GOAL_CANS = 40; // Total drops needed to collect for first mission (doubled)
 let currentCans = 0; // Current number of drops collected
 let gameActive = false; // Tracks if game is currently running
@@ -12,14 +9,30 @@ let timeLeft = 30; // Standard game time in seconds
 let gamesCompleted = 0; // Track completed games for difficulty progression
 let currentDifficulty = 1; // Current difficulty level
 let milestone25Celebrated = false; // Track if we've celebrated 25 points
+let hasPlayedOnce = false; // Track if user has played at least one game
+let lastDifficultyPopup = 0; // Track last difficulty level when popup was shown
+
+// Audio files
+const audioGameWon = new Audio('audio/Game-won.mp3');
+const audioNewLevel = new Audio('audio/Game-new-level.mp3');
+
+// Array of water crisis facts for popup rotation
+const waterFacts = [
+  "785 million people lack access to clean water. Together, we can change that.",
+  "Every 2 minutes, a child dies from a water-related disease.",
+  "Women and children spend 200 million hours every day collecting water.",
+  "1 in 10 people worldwide lack access to safe water.",
+  "Diseases from unsafe water kill more people every year than all forms of violence, including war.",
+  "Access to clean water gives communities more time to grow food, earn income, and go to school.",
+  "Every $1 invested in clean water can yield $4–$12 in economic returns.",
+  "Clean water helps keep kids in school, especially girls.",
+  "In Africa alone, people spend 40 billion hours every year walking for water."
+];
 
 // Check if first visit and show How to Play
 function checkFirstVisit() {
-  const hasVisited = localStorage.getItem('waterQuestVisited');
-  if (!hasVisited) {
-    localStorage.setItem('waterQuestVisited', 'true');
-    setTimeout(() => showHowToPlay(), 500);
-  }
+  // Always show How to Play on page load (game open)
+  setTimeout(() => showHowToPlay(), 500);
 }
 
 // Show How to Play popup
@@ -117,26 +130,33 @@ const DROP_TYPES = [
 
 let dropQueue = [];
 let dropsSpawned = 0;
-let currentLevel = 1;
 const GRID_SIZE = 9;
 
 function setupDropQueue(level = 1) {
-  let orangeCount = 6;
-  let greenCount = 6;
-  let yellowCount = 10;
+  // Calculate how many drops we need for 30 seconds
+  // At 800ms spawn rate = ~37 drops, at 400ms = ~75 drops
+  // We'll create enough for worst case (fastest difficulty) with buffer
+  const totalDropsNeeded = 100; // Enough for all difficulty levels
+  
+  // Base proportions for drop types
+  let orangeCount = 12;  // Increased
+  let greenCount = 12;   // Increased
+  let yellowCount = 20;  // Increased
   if (level >= 4 && level <= 6) {
-    orangeCount += 6;
-    greenCount += 6;
-    yellowCount += 6;
+    orangeCount += 8;
+    greenCount += 8;
+    yellowCount += 8;
   }
-  let rainbowCount = 2;
-  let blueCount = GOAL_CANS - (orangeCount + greenCount + yellowCount + rainbowCount);
+  let rainbowCount = 4;  // Increased
+  let blueCount = totalDropsNeeded - (orangeCount + greenCount + yellowCount + rainbowCount);
+  
   dropQueue = [];
   dropQueue = dropQueue.concat(Array(orangeCount).fill('orange'));
   dropQueue = dropQueue.concat(Array(greenCount).fill('green'));
   dropQueue = dropQueue.concat(Array(yellowCount).fill('yellow'));
   dropQueue = dropQueue.concat(Array(rainbowCount).fill('rainbow'));
   dropQueue = dropQueue.concat(Array(blueCount).fill('blue'));
+  
   // Shuffle dropQueue
   for (let i = dropQueue.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -200,7 +220,6 @@ function showOrangeSplash(cell) {
 }
 
 function showWaterSplash(cell) {
-  console.log('showWaterSplash called for cell:', cell);
   // Create multiple ripple rings for enhanced effect
   for (let i = 0; i < 3; i++) {
     setTimeout(() => {
@@ -219,7 +238,6 @@ function showWaterSplash(cell) {
 }
 
 function showRainbowConfettiShower() {
-  console.log('showRainbowConfettiShower called');
   let oldShower = document.getElementById('rainbow-confetti-shower');
   if (oldShower) oldShower.remove();
   const shower = document.createElement('div');
@@ -267,18 +285,22 @@ function showMilestoneCelebration() {
     celebration.appendChild(confetti);
   }
   
-  setTimeout(() => celebration.remove(), 3000);
+  // Reduced duration from 3000ms to 1500ms (half)
+  setTimeout(() => celebration.remove(), 1500);
 }
 
 // Show charity:water mission popup
 function showMissionPopup() {
+  // Select a random water fact
+  const randomFact = waterFacts[Math.floor(Math.random() * waterFacts.length)];
+  
   const popup = document.createElement('div');
   popup.className = 'mission-popup';
   popup.innerHTML = `
     <div class="popup-content">
       <h2>💧 Clean Water Changes Everything</h2>
       <p>You just helped spread awareness about the global water crisis!</p>
-      <p>785 million people lack access to clean water. Together, we can change that.</p>
+      <p>${randomFact}</p>
       <div class="popup-buttons">
         <a href="https://www.charitywater.org/donate" target="_blank" class="popup-btn popup-btn-primary">Donate Now</a>
         <a href="https://www.charitywater.org/global-water-crisis" target="_blank" class="popup-btn">Learn More</a>
@@ -324,7 +346,6 @@ function spawnWaterCan() {
         setTimeout(() => showMilestoneCelebration(), 300);
       }
       
-      console.log('Drop clicked:', dropType.name);
       if (dropType.name === 'rainbow') {
         showRainbowConfettiShower();
       } else if (dropType.name === 'blue') {
@@ -341,10 +362,6 @@ function spawnWaterCan() {
         splash.style.transform = 'translate(-50%, -50%)';
         randomCell.appendChild(splash);
         setTimeout(() => splash.remove(), 500);
-      }
-
-      if (currentCans >= GOAL_CANS) {
-        endGame();
       }
 
       randomCell.innerHTML = '';
@@ -371,8 +388,15 @@ function startGame() {
   if (gameActive) return;
   gameActive = true;
   milestone25Celebrated = false;
+  
+  // Clear the grid and recreate it
   createGrid();
-  setupDropQueue(currentLevel);
+  
+  // Reset and setup drop queue
+  dropsSpawned = 0; // Reset drop counter
+  setupDropQueue(currentDifficulty);
+  
+  // Reset timer
   timeLeft = 30;
   document.getElementById('timer').textContent = timeLeft;
   
@@ -392,10 +416,29 @@ function endGame() {
   clearInterval(spawnInterval);
   clearInterval(timerInterval);
   
+  // Play game won sound
+  audioGameWon.currentTime = 0; // Reset to start
+  audioGameWon.play().catch(err => console.error('Audio play failed:', err));
+  
+  // Clear any remaining drops from the grid
+  const cells = document.querySelectorAll('.grid-cell');
+  cells.forEach(cell => {
+    cell.innerHTML = '';
+  });
+  
   // Increment games completed and check for difficulty increase
   gamesCompleted++;
+  let difficultyChanged = false;
   if (gamesCompleted % 3 === 0) {
     currentDifficulty++;
+    difficultyChanged = true;
+    
+    // Play new level sound immediately after game won sound (1.5 second delay)
+    setTimeout(() => {
+      audioNewLevel.currentTime = 0; // Reset to start
+      audioNewLevel.play().catch(err => console.error('Audio play failed:', err));
+    }, 1500);
+    
     // Show difficulty increase notification
     const notif = document.createElement('div');
     notif.className = 'difficulty-notification';
@@ -404,18 +447,43 @@ function endGame() {
     setTimeout(() => notif.remove(), 3000);
   }
   
-  // Show mission popup after game ends
-  setTimeout(() => showMissionPopup(), 1000);
+  // Show mission popup only after first game OR when difficulty increases
+  const shouldShowPopup = (!hasPlayedOnce) || (difficultyChanged && currentDifficulty !== lastDifficultyPopup);
+  if (shouldShowPopup) {
+    hasPlayedOnce = true;
+    lastDifficultyPopup = currentDifficulty;
+    setTimeout(() => showMissionPopup(), 1000);
+  }
+  
+  // Update button text to "Play Again" after first game
+  if (hasPlayedOnce) {
+    document.getElementById('start-game').textContent = 'Play Again';
+  }
 }
 
 document.getElementById('start-game').addEventListener('click', function () {
+  // Clear any existing intervals first
+  if (spawnInterval) clearInterval(spawnInterval);
+  if (timerInterval) clearInterval(timerInterval);
+  
+  // Reset game state completely
+  gameActive = false;
   currentCans = 0;
+  dropsSpawned = 0; // Reset drop counter
   document.getElementById('current-cans').textContent = currentCans;
+  
+  // Remove popups/effects
   const shower = document.getElementById('drop-shower');
   if (shower) shower.remove();
   const popup = document.querySelector('.mission-popup');
   if (popup) popup.remove();
-  currentLevel = 1;
+  
+  // Clear the grid before starting
+  const cells = document.querySelectorAll('.grid-cell');
+  cells.forEach(cell => {
+    cell.innerHTML = '';
+  });
+  
   startGame();
 });
 
@@ -425,6 +493,7 @@ document.getElementById('reset-game').addEventListener('click', function () {
   document.getElementById('current-cans').textContent = currentCans;
   timeLeft = 30;
   document.getElementById('timer').textContent = timeLeft;
+  dropsSpawned = 0; // Reset drop counter
   createGrid();
   const shower = document.getElementById('drop-shower');
   if (shower) shower.remove();
@@ -433,6 +502,14 @@ document.getElementById('reset-game').addEventListener('click', function () {
   // Reset difficulty on manual reset
   gamesCompleted = 0;
   currentDifficulty = 1;
+  
+  // Reset to "Play Now" when game is fully reset
+  hasPlayedOnce = false;
+  lastDifficultyPopup = 0;
+  document.getElementById('start-game').textContent = 'Play Now';
+  
+  // Show How to Play popup when Reset is clicked
+  setTimeout(() => showHowToPlay(), 500);
 });
 
 // How to Play link handler
