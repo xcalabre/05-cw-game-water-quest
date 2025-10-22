@@ -480,7 +480,7 @@ h1 img {
 
 
 button {
-  background-color: #4CAF50;
+  background-color: #2E9DF7;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -632,7 +632,7 @@ body {
 }
 
 .popup-btn-close {
-  background: #ddd;
+  background: #838181;
   color: #333;
 }
 
@@ -650,7 +650,7 @@ body {
   z-index: 10001;
   animation: fadeIn 0.3s ease-out;
   overflow-y: auto;
-  padding: 20px;
+  padding: 10px;
 }
 
 .howto-content {
@@ -661,7 +661,7 @@ body {
 
 .howto-content h2 {
   color: #2E9DF7;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-size: 28px;
   text-align: center;
 }
@@ -669,8 +669,8 @@ body {
 .howto-instructions {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .howto-item {
@@ -678,7 +678,7 @@ body {
   align-items: flex-start;
   gap: 15px;
   padding: 15px;
-  background: #f9f9f9;
+  background: #838181
   border-radius: 10px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -865,6 +865,18 @@ body {
 .donate-button {
   height: 35px;
   cursor: pointer;
+}
+
+.footer-links a {
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+.footer-links a:hover {
+  opacity: 0.7;
 }
 
 /* Adjust container margin for footer */
